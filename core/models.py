@@ -69,12 +69,18 @@ class Problem(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    def __str__(self):
+        return self.title
+
 
 class Language(models.Model):
     name = models.CharField(max_length=50)
     file_extension = models.CharField(max_length=5)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.name
 
 
 class TestCase(models.Model):
@@ -84,6 +90,9 @@ class TestCase(models.Model):
     is_public = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
+    def __str__(self):
+        return f"{self.problem}-{self.id}"
+
 
 class Submission(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='submissions')
@@ -92,6 +101,9 @@ class Submission(models.Model):
     code = models.TextField()
     status = models.CharField(max_length=30, choices=STATUS_CHOICES, default='PENDING')
     created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.id}-{self.user}-{self.problem}"
 
 
 class TestCaseResult(models.Model):
