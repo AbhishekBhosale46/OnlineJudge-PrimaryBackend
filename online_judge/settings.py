@@ -139,3 +139,5 @@ AUTH_USER_MODEL = 'core.User'
 REST_FRAMEWORK ={
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 }
+
+JUDGE_SERVER_SUBMIT_URL = "127.0.0.1:9000/submit/"
