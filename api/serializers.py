@@ -37,14 +37,20 @@ class TestCaseListSerializer(serializers.ModelSerializer):
             return file.read()
 
 
+class TestCaseResultSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TestCaseResult
+        fields = '__all__'
+
+
 class SubmissionSerializer(serializers.ModelSerializer):
     submission_status = serializers.SerializerMethodField()
-    testcase_results = serializers.SerializerMethodField()
+    test_case_results = TestCaseResultSerializer(many=True, read_only=True)
 
     class Meta:
         model = Submission
-        fields = ['id', 'problem', 'language', 'code', 'submission_status', 'created_at', 'testcase_results']
-        read_only = ['id', 'submission_status', 'created_at', 'testcase_results']
+        fields = ['id', 'problem', 'language', 'code', 'submission_status', 'created_at', 'test_case_results']
+        read_only = ['id', 'submission_status', 'created_at', 'test_case_results']
         extra_kwargs = {
             'language': {'write_only': True},
             'code': {'write_only': True},
@@ -52,6 +58,3 @@ class SubmissionSerializer(serializers.ModelSerializer):
     
     def get_submission_status(self, submission):
         return submission.status
-
-    def get_testcase_results(self, submission):
-        return "testcase results here"

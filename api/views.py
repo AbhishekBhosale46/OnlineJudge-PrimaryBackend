@@ -75,3 +75,25 @@ class SubmissionView(views.APIView):
                 # requests.post(settings.JUDGE_SERVER_SUBMIT_URL, json=post_data)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class UserSubmissionDetailView(generics.RetrieveAPIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+    queryset = Submission.objects.all()
+    serializer_class = SubmissionSerializer
+
+    def get_queryset(self):
+        user = self.request.user
+        return self.queryset.filter(user=user)
+
+
+class UserSubmissionsListView(generics.ListAPIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+    serializer_class = SubmissionSerializer
+
+    def get_queryset(self):
+        user = self.request.user
+        problem_id = self.kwargs['id']
+        return Submission.objects.filter(user=user, problem_id=problem_id)
