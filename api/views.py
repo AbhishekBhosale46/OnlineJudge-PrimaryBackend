@@ -4,8 +4,10 @@ from rest_framework.response import Response
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from django.conf import settings
+from django.shortcuts import get_object_or_404
 from core.models import *
 from api.serializers import *
+from .permissions import AllowSpecificIP
 
 
 class ProblemList(generics.ListAPIView):
@@ -62,7 +64,7 @@ class SubmissionView(views.APIView):
                     submission=submission,
                     test_case=test_case
                 )
-                callback_url = f"/evaluate-testcase-result/{testcase_result.id}"
+                callback_url = f"{settings.CALLBACK_URL}/{testcase_result.id}"
                 post_data = {
                     "language": language,
                     "time_limit": time_limit,
@@ -97,3 +99,14 @@ class UserSubmissionsListView(generics.ListAPIView):
         user = self.request.user
         problem_id = self.kwargs['id']
         return Submission.objects.filter(user=user, problem_id=problem_id)
+
+
+class WebhookHandlerView(views.APIView):
+    authentication_classes = []
+    permission_classes = [AllowSpecificIP]
+    def post(self, request, id):
+        test_case_result = get_object_or_404(TestCaseResult, id=id)
+        judge_server_status =  request.data.get("status", "PENDING")
+        test_case_result.status = judge_server_status
+        test_case_result.save()
+        return Response({"message": "Webhook received!"}, status=status.HTTP_200_OK)

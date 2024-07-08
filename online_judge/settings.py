@@ -140,4 +140,8 @@ REST_FRAMEWORK ={
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 }
 
-JUDGE_SERVER_SUBMIT_URL = "127.0.0.1:9000/submit/"
+JUDGE_SERVER_SUBMIT_URL = "127.0.0.1:9000/submit"
+
+ALLOWED_JUDGE_SERVER_IP = '127.0.0.2'
+
+CALLBACK_URL = '127.0.0.1:8000/api/evaluate-testcase-result'
