@@ -2,6 +2,7 @@
 
 Welcome to the Online Judge Backend repository! This project is designed to provide a scalable, secure, and efficient backend for an online coding platform where users can solve listed problems in various programming languages, similar to platforms like LeetCode.
 
+Here is the link to the external [judge server](https://github.com/AbhishekBhosale46/OnlineJudge-JudgeServer) used for code evaluation.
 
 ## Features
 
